@@ -15,11 +15,11 @@ class Test {
 
   factory Test.fromJson(Map<String, dynamic> json) {
     return Test(
-      id: json['_id'],
-      patientId: json['patientId'],
+      id: json['_id'] ?? '', // Provide a default value if null
+      patientId: json['patientId'] ?? '', // Provide a default value if null
       date: DateTime.parse(json['date']),
-      type: json['type'],
-      value: json['value'],
+      type: json['type'] ?? '', // Provide a default value if null
+      value: json['value'] ?? '', // Provide a default value if null
     );
   }
 }

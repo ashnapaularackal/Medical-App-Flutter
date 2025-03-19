@@ -38,7 +38,7 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
   Future<void> _loadTests() async {
     try {
       final loadedTests =
-          await ApiService.getTestsForPatient(widget.patient.id);
+          await ApiService.getTestsForPatient(widget.patient.id!);
       setState(() {
         tests = loadedTests;
         _loading = false;
@@ -56,7 +56,8 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(widget.patient.name, style: TextStyle(color: Colors.white)),
+        title: Text(widget.patient.name ?? 'Patient Details',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -113,7 +114,8 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
           final result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddTestScreen(patientId: widget.patient.id),
+              builder: (context) => AddTestScreen(
+                  patientId: widget.patient.id!), // The "!" is added
             ),
           );
           if (result == true) {
@@ -147,12 +149,12 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
             ),
             SizedBox(height: 10),
             _buildDetailRow('Age', widget.patient.age.toString()),
-            _buildDetailRow('Gender', widget.patient.gender),
+            _buildDetailRow('Gender', widget.patient.gender ?? 'N/A'),
             _buildDetailRow('Address', widget.patient.address ?? 'N/A'),
             _buildDetailRow('Phone', widget.patient.phoneNumber ?? 'N/A'),
             SizedBox(height: 10),
             // Highlight for critical patients
-            if (widget.patient.criticalCondition)
+            if (widget.patient.criticalCondition ?? false)
               Container(
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 decoration: BoxDecoration(

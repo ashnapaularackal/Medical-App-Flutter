@@ -16,16 +16,19 @@ class PatientCard extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: CircleAvatar(
-          backgroundColor: patient.criticalCondition ? Colors.red : Colors.blue,
+          backgroundColor:
+              patient.criticalCondition ?? false ? Colors.red : Colors.blue,
           child: Text(
-            patient.name[0].toUpperCase(),
+            (patient.name != null && patient.name!.isNotEmpty)
+                ? patient.name![0].toUpperCase()
+                : '',
             style: TextStyle(color: Colors.white),
           ),
         ),
-        title:
-            Text(patient.name, style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(patient.name ?? 'N/A',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text('Age: ${patient.age}, Gender: ${patient.gender}'),
-        trailing: patient.criticalCondition
+        trailing: (patient.criticalCondition ?? false)
             ? Chip(
                 label: Text('Critical', style: TextStyle(color: Colors.white)),
                 backgroundColor: Colors.red,

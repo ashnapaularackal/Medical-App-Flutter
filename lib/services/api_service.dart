@@ -23,6 +23,7 @@ class ApiService {
       body: json.encode(patientData),
     );
     if (response.statusCode == 201) {
+      print("API Response: ${response.body}"); // Debug the response
       return Patient.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to add patient');
@@ -93,9 +94,9 @@ class ApiService {
   }
 
   static Future<void> updateTest(
-      String testId, Map<String, dynamic> testData) async {
+      String patientId, String testId, Map<String, dynamic> testData) async {
     final response = await http.put(
-      Uri.parse('$baseUrl/tests/$testId'),
+      Uri.parse('$baseUrl/patients/$patientId/tests/$testId'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(testData),
     );
@@ -104,10 +105,32 @@ class ApiService {
     }
   }
 
-  static Future<void> deleteTest(String testId) async {
-    final response = await http.delete(Uri.parse('$baseUrl/tests/$testId'));
+  static Future<void> deleteTest(String patientId, String testId) async {
+    final response = await http
+        .delete(Uri.parse('$baseUrl/patients/$patientId/tests/$testId'));
     if (response.statusCode != 200) {
       throw Exception('Failed to delete test');
+    }
+  }
+
+  static Future<Test> getTestById(String patientId, String testId) async {
+    final response =
+        await http.get(Uri.parse('$baseUrl/patients/$patientId/tests/$testId'));
+    if (response.statusCode == 200) {
+      return Test.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load test');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getPatientHistory(
+      String patientId) async {
+    final response =
+        await http.get(Uri.parse('$baseUrl/patients/$patientId/history'));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load patient history');
     }
   }
 }

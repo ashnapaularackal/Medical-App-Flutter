@@ -108,7 +108,7 @@ class _CriticalPatientsScreenState extends State<CriticalPatientsScreen> {
           child: Icon(Icons.warning, color: Colors.white),
         ),
         title: Text(
-          patient.name,
+          patient.name ?? 'N/A',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         subtitle: Column(

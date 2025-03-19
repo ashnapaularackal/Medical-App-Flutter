@@ -185,6 +185,7 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
         _isLoading = true;
       });
 
+      // Inside _submitForm() in AddPatientScreen
       try {
         final patientData = {
           'name': _nameController.text,
@@ -199,10 +200,16 @@ class _AddPatientScreenState extends State<AddPatientScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Patient added successfully')),
         );
-        Navigator.pop(context, newPatient);
+        // Return true instead of the patient object
+        Navigator.pop(context, true);
       } catch (e) {
+        // Rest of your code remains the same
+        print('Error adding patient: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add patient: $e')),
+          SnackBar(
+            content: Text('Failed to add patient. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
         );
       } finally {
         setState(() {
