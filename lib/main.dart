@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
+import 'screens/welcomescreen.dart';
 import 'screens/patient_list_screen.dart';
 import 'screens/add_patient_screen.dart';
 import 'screens/critical_patients_screen.dart';
@@ -57,7 +58,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => MainScreen(),
+        '/': (context) => WelcomeScreen(),
+        '/home': (context) => MainScreen(),
         '/add_patient': (context) => AddPatientScreen(),
       },
       onGenerateRoute: (settings) {
