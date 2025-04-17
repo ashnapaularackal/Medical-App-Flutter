@@ -10,12 +10,7 @@ import 'dart:math' as math;
 /// PatientListScreen displays a list of patients with pull-to-refresh functionality,
 /// swipe-to-delete, and navigation to patient details.
 ///
-/// Features:
-/// - Material Design 3 inspired UI with dynamic theming
-/// - Animated transitions and loading states
-/// - Pull-to-refresh for updated patient data
-/// - Swipe-to-delete with confirmation
-/// - Search functionality for filtering patients
+
 class PatientListScreen extends StatefulWidget {
   const PatientListScreen({Key? key}) : super(key: key);
 

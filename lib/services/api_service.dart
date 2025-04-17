@@ -3,14 +3,21 @@ import 'package:http/http.dart' as http;
 import '../models/patient.dart';
 import '../models/test.dart';
 
+/// Service class that handles all API communications with the backend server.
+/// Provides methods for CRUD operations on patients and their medical tests.
 class ApiService {
   static const String baseUrl = 'http://10.0.2.2:5000/api';
+
+  /// Default headers used in all HTTP requests.
+  /// Sets the content type to JSON for proper data formatting.
   static const Map<String, String> headers = {
     'Content-Type': 'application/json',
-    // Add authentication headers if needed
-    // 'Authorization': 'Bearer your_token',
   };
 
+  /// Fetches all patients from the server.
+  ///
+  /// Returns a list of [Patient] objects.
+  /// Throws an exception if the request fails.
   static Future<List<Patient>> getAllPatients() async {
     final response =
         await http.get(Uri.parse('$baseUrl/patients'), headers: headers);
@@ -22,6 +29,11 @@ class ApiService {
     }
   }
 
+  /// Creates a new patient record on the server.
+  ///
+  /// [patientData] - Map containing the patient information.
+  /// Returns the newly created [Patient] object with server-generated ID.
+  /// Throws an exception if the request fails.
   static Future<Patient> addPatient(Map<String, dynamic> patientData) async {
     try {
       final response = await http.post(
@@ -39,6 +51,11 @@ class ApiService {
     }
   }
 
+  /// Retrieves a specific patient by ID.
+  ///
+  /// [id] - The unique identifier of the patient.
+  /// Returns a [Patient] object.
+  /// Throws an exception if the patient is not found or another error occurs.
   static Future<Patient> getPatientById(String id) async {
     final response =
         await http.get(Uri.parse('$baseUrl/patients/$id'), headers: headers);
@@ -49,6 +66,11 @@ class ApiService {
     }
   }
 
+  /// Fetches all medical tests associated with a specific patient.
+  ///
+  /// [patientId] - The unique identifier of the patient.
+  /// Returns a list of [Test] objects.
+  /// Throws an exception if the request fails.
   static Future<List<Test>> getTestsForPatient(String patientId) async {
     final response = await http
         .get(Uri.parse('$baseUrl/patients/$patientId/tests'), headers: headers);
@@ -60,6 +82,12 @@ class ApiService {
     }
   }
 
+  /// Adds a new medical test for a specific patient.
+  ///
+  /// [patientId] - The unique identifier of the patient.
+  /// [testData] - Map containing the test information.
+  /// Returns the newly created [Test] object with server-generated ID.
+  /// Throws an exception if the request fails.
   static Future<Test> addTestForPatient(
       String patientId, Map<String, dynamic> testData) async {
     try {
@@ -78,6 +106,10 @@ class ApiService {
     }
   }
 
+  /// Fetches all patients marked as critical.
+  ///
+  /// Returns a list of [Patient] objects in critical condition.
+  /// Throws an exception if the request fails.
   static Future<List<Patient>> getCriticalPatients() async {
     final response = await http.get(Uri.parse('$baseUrl/patients/critical'),
         headers: headers);
@@ -89,6 +121,11 @@ class ApiService {
     }
   }
 
+  /// Updates an existing patient's information.
+  ///
+  /// [id] - The unique identifier of the patient to update.
+  /// [patientData] - Map containing the updated patient information.
+  /// Throws an exception if the update fails.
   static Future<void> updatePatient(
       String id, Map<String, dynamic> patientData) async {
     try {
@@ -105,6 +142,10 @@ class ApiService {
     }
   }
 
+  /// Deletes a patient record from the system.
+  ///
+  /// [id] - The unique identifier of the patient to delete.
+  /// Throws an exception if the deletion fails.
   static Future<void> deletePatient(String id) async {
     try {
       final response = await http.delete(Uri.parse('$baseUrl/patients/$id'),
@@ -117,9 +158,13 @@ class ApiService {
     }
   }
 
-  // Add these methods to your ApiService class
-
-// Update test
+  /// Updates an existing medical test.
+  ///
+  /// [patientId] - The unique identifier of the patient.
+  /// [testId] - The unique identifier of the test to update.
+  /// [testData] - Map containing the updated test information.
+  /// Returns the updated [Test] object.
+  /// Throws an exception if the update fails.
   static Future<Test> updateTest({
     required String patientId,
     required String testId,
@@ -144,7 +189,11 @@ class ApiService {
     }
   }
 
-// Delete test
+  /// Deletes a medical test from the system.
+  ///
+  /// [patientId] - The unique identifier of the patient.
+  /// [testId] - The unique identifier of the test to delete.
+  /// Throws an exception if the deletion fails.
   static Future<void> deleteTest({
     required String patientId,
     required String testId,
@@ -154,6 +203,7 @@ class ApiService {
     try {
       final response = await http.delete(url);
 
+      // Accept both 200 (OK) and 204 (No Content) as successful responses
       if (response.statusCode != 200 && response.statusCode != 204) {
         throw Exception('Failed to delete test: ${response.statusCode}');
       }
@@ -162,6 +212,12 @@ class ApiService {
     }
   }
 
+  /// Retrieves a specific test by its ID for a patient.
+  ///
+  /// [patientId] - The unique identifier of the patient.
+  /// [testId] - The unique identifier of the test.
+  /// Returns a [Test] object.
+  /// Throws an exception if the test is not found or another error occurs.
   static Future<Test> getTestById(String patientId, String testId) async {
     final response = await http.get(
         Uri.parse('$baseUrl/patients/$patientId/tests/$testId'),
@@ -173,6 +229,11 @@ class ApiService {
     }
   }
 
+  /// Fetches a patient's medical history.
+  ///
+  /// [patientId] - The unique identifier of the patient.
+  /// Returns a map containing the patient's medical history data.
+  /// Throws an exception if the request fails.
   static Future<Map<String, dynamic>> getPatientHistory(
       String patientId) async {
     final response = await http.get(
@@ -185,6 +246,10 @@ class ApiService {
     }
   }
 
+  /// Helper method that converts HTTP error responses into meaningful exceptions.
+  ///
+  /// [response] - The HTTP response to process.
+  /// Returns an appropriate Exception based on the status code.
   static Exception _handleError(http.Response response) {
     switch (response.statusCode) {
       case 400:
